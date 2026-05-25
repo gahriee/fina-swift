@@ -43,3 +43,8 @@ Do not import or suggest third-party packages for state management, navigation, 
 - Make edits exclusively within the `Fina/` directory.
 
 *Follow these rules closely to maintain a clean, native, and maintainable SwiftUI codebase.*
+
+## Troubleshooting & Gotchas
+- **Complex View Expressions:** If the compiler throws *"The compiler is unable to type-check this expression in reasonable time"*, it means the SwiftUI `body` block is too large. Break down large `VStack` or `HStack` chunks into smaller, private `@ViewBuilder` variables or separate structs.
+- **`.onChange` Deprecation:** In iOS 17 / macOS 14+, `.onChange(of: value) { _ in }` is deprecated. Use the zero-parameter closure instead: `.onChange(of: value) { }`.
+- **Cross-Platform Colors:** Avoid using `NSColor` directly (e.g., `Color(nsColor: .windowBackgroundColor)`) unless explicitly importing `AppKit`. Instead, prefer generic Semantic colors like `Color.secondary.opacity(0.1)` to ensure the codebase remains compiler-friendly across Apple platforms.
