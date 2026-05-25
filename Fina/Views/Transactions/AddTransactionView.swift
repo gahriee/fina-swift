@@ -87,7 +87,7 @@ struct AddTransactionView: View {
             }
             .formStyle(.grouped)
         }
-        .frame(width: 420, height: 500)
+        .frame(maxWidth: 420, maxHeight: 500)
         .onAppear {
             if let tx = editing {
                 amountText = String(format: "%.2f", tx.amount)

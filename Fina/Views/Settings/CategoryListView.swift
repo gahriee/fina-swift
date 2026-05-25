@@ -135,7 +135,7 @@ struct CategoryListView: View {
             }
         }
         .padding(32)
-        .frame(width: 360)
+        .frame(maxWidth: 360)
         .background(.regularMaterial)
     }
 }

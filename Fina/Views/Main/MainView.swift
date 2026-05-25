@@ -23,6 +23,5 @@ struct MainView: View {
                 .tabItem { Label("Settings", systemImage: "gear") }
                 .tag(3)
         }
-        .frame(minWidth: 700, minHeight: 500)
     }
 }

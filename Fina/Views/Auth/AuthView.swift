@@ -35,7 +35,7 @@ struct AuthView: View {
                     .fill(.regularMaterial)
                     .shadow(color: Color.black.opacity(0.1), radius: 30, x: 0, y: 15)
             )
-            .frame(width: 420)
+            .frame(maxWidth: 420)
             .animation(.easeInOut(duration: 0.3), value: isLogin)
             .animation(.easeInOut, value: authVM.error)
         }
