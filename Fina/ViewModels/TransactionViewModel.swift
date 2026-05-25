@@ -81,6 +81,10 @@ final class TransactionViewModel: ObservableObject {
         try? await service.addCategory(c)
     }
 
+    func updateCategory(_ updated: Category) async {
+        try? await service.updateCategory(updated)
+    }
+
     /// Returns false if category is in use — same rule as Flutter version
     func deleteCategory(id: String) async -> Bool {
         if transactions.contains(where: { $0.categoryId == id }) { return false }

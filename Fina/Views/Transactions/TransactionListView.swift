@@ -64,21 +64,30 @@ struct TransactionListView: View {
                 }
             }
             .navigationTitle("Transactions")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button { showAddSheet = true } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(AppColors.primary)
-                    }
-                    .buttonStyle(.plain)
+            .overlay(alignment: .bottomTrailing) {
+                Button { showAddSheet = true } label: {
+                    Image(systemName: "plus")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(16)
+                        .background(AppColors.primary)
+                        .clipShape(Circle())
+                        .shadow(color: AppColors.primary.opacity(0.3), radius: 10, x: 0, y: 5)
                 }
+                .buttonStyle(.plain)
+                .padding(24)
             }
             .sheet(isPresented: $showAddSheet) {
                 AddTransactionView(userId: authVM.currentUser?.uid ?? "")
+                    #if os(iOS)
+                    .presentationDetents([.fraction(0.75), .large])
+                    #endif
             }
             .sheet(item: $editingTx) { tx in
                 AddTransactionView(userId: authVM.currentUser?.uid ?? "", editing: tx)
+                    #if os(iOS)
+                    .presentationDetents([.fraction(0.75), .large])
+                    #endif
             }
         }
     }

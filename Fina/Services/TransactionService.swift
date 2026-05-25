@@ -60,6 +60,10 @@ final class TransactionService {
         try await db.collection("categories").document(id).delete()
     }
 
+    func updateCategory(_ c: Category) async throws {
+        try await db.collection("categories").document(c.id).updateData(c.toDict())
+    }
+
     func seedCategories(userId: String) async throws {
         let seeds: [(String, String, TransactionType)] = [
             ("Food",          "fork.knife",            .expense),

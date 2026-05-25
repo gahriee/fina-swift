@@ -4,6 +4,7 @@ struct DashboardView: View {
     @EnvironmentObject var transactionVM: TransactionViewModel
     @EnvironmentObject var authVM:        AuthViewModel
     @State private var showAddSheet = false
+    @State private var editingTx:   Transaction?
 
     var body: some View {
         NavigationStack {
@@ -30,17 +31,30 @@ struct DashboardView: View {
                 }
             }
             .navigationTitle("Dashboard")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button { showAddSheet = true } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(AppColors.primary)
-                    }
+            .overlay(alignment: .bottomTrailing) {
+                Button { showAddSheet = true } label: {
+                    Image(systemName: "plus")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(16)
+                        .background(AppColors.primary)
+                        .clipShape(Circle())
+                        .shadow(color: AppColors.primary.opacity(0.3), radius: 10, x: 0, y: 5)
                 }
+                .buttonStyle(.plain)
+                .padding(24)
             }
             .sheet(isPresented: $showAddSheet) {
                 AddTransactionView(userId: authVM.currentUser?.uid ?? "")
+                    #if os(iOS)
+                    .presentationDetents([.fraction(0.75), .large])
+                    #endif
+            }
+            .sheet(item: $editingTx) { tx in
+                AddTransactionView(userId: authVM.currentUser?.uid ?? "", editing: tx)
+                    #if os(iOS)
+                    .presentationDetents([.fraction(0.75), .large])
+                    #endif
             }
         }
     }
@@ -66,6 +80,8 @@ struct DashboardView: View {
                         )
                         .padding(.vertical, 12)
                         .padding(.horizontal, 16)
+                        .contentShape(Rectangle())
+                        .onTapGesture { editingTx = tx }
                         
                         if index < transactionVM.recentTransactions.count - 1 {
                             Divider()

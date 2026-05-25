@@ -19,11 +19,12 @@ struct SettingsView: View {
                             .multilineTextAlignment(.trailing)
                             .frame(maxWidth: 100)
                             .textFieldStyle(.plain)
+                            .foregroundColor(.white)
                             .onAppear { currencyInput = transactionVM.settings.currencySymbol }
                             .onSubmit { saveSettings() }
                     }
                 } header: {
-                    Text("Currency")
+                    Text("Currency").foregroundColor(.white)
                 }
 
                 // Appearance
@@ -51,24 +52,28 @@ struct SettingsView: View {
                         .frame(maxWidth: 200)
                     }
                 } header: {
-                    Text("Appearance")
+                    Text("Appearance").foregroundColor(.white)
                 }
 
                 // Account
                 Section {
                     if let email = authVM.currentUser?.email {
-                        LabeledContent {
-                            Text(email).foregroundColor(.secondary)
-                        } label: {
+                        VStack(alignment: .leading, spacing: 4) {
                             Label("Signed in as", systemImage: "person.crop.circle.fill")
                                 .foregroundColor(AppColors.primary)
+                            Text(email)
+                                .foregroundColor(.white)
+                                .font(.subheadline)
+                                .padding(.leading, 32)
                         }
+                        .padding(.vertical, 4)
                     }
                     Button(role: .destructive) { authVM.logout() } label: {
                         Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
+                            .foregroundColor(.red)
                     }
                 } header: {
-                    Text("Account")
+                    Text("Account").foregroundColor(.white)
                 }
 
                 // Data
@@ -85,10 +90,11 @@ struct SettingsView: View {
                             .foregroundColor(.red)
                     }
                 } header: {
-                    Text("Data")
+                    Text("Data").foregroundColor(.white)
                 }
             }
             .formStyle(.grouped)
+            .foregroundColor(.white)
             .navigationTitle("Settings")
             .alert("Clear All Data?", isPresented: $showClearAlert) {
                 Button("Clear", role: .destructive) {
