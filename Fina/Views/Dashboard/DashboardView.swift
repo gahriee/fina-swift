@@ -17,24 +17,7 @@ struct DashboardView: View {
                         currencySymbol: transactionVM.settings.currencySymbol
                     )
 
-                    // Recent transactions
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Recent").font(.headline)
-                        if transactionVM.recentTransactions.isEmpty {
-                            EmptyStateView(message: "No transactions yet")
-                        } else {
-                            ForEach(transactionVM.recentTransactions) { tx in
-                                TransactionRow(
-                                    transaction:    tx,
-                                    category:       transactionVM.categories.first { $0.id == tx.categoryId },
-                                    currencySymbol: transactionVM.settings.currencySymbol
-                                )
-                            }
-                        }
-                    }
-                    .padding()
-                    .background(Color(nsColor: .windowBackgroundColor))
-                    .cornerRadius(16)
+                    recentTransactionsSection
                 }
                 .padding()
             }
@@ -50,5 +33,26 @@ struct DashboardView: View {
                 AddTransactionView(userId: authVM.currentUser?.uid ?? "")
             }
         }
+    }
+
+    @ViewBuilder
+    private var recentTransactionsSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Recent").font(.headline)
+            if transactionVM.recentTransactions.isEmpty {
+                EmptyStateView(message: "No transactions yet")
+            } else {
+                ForEach(transactionVM.recentTransactions) { tx in
+                    TransactionRow(
+                        transaction:    tx,
+                        category:       transactionVM.categories.first { $0.id == tx.categoryId },
+                        currencySymbol: transactionVM.settings.currencySymbol
+                    )
+                }
+            }
+        }
+        .padding()
+        .background(Color.secondary.opacity(0.1))
+        .cornerRadius(16)
     }
 }

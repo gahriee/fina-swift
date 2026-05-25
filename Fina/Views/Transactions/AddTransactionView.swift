@@ -57,7 +57,7 @@ struct AddTransactionView: View {
                         }
                     }
                     .pickerStyle(.segmented)
-                    .onChange(of: type) { _ in categoryId = "" }
+                    .onChange(of: type) { categoryId = "" }
                 }
 
                 // Category dropdown — filtered by type
