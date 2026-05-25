@@ -10,53 +10,85 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 // Currency
-                Section("Currency") {
-                    TextField("Symbol (e.g. PHP, $, €)", text: $currencyInput)
-                        .onAppear { currencyInput = transactionVM.settings.currencySymbol }
-                        .onSubmit { saveSettings() }
+                Section {
+                    HStack {
+                        Label("Currency Symbol", systemImage: "dollarsign.circle.fill")
+                            .foregroundColor(AppColors.primary)
+                        Spacer()
+                        TextField("e.g. PHP, $, €", text: $currencyInput)
+                            .multilineTextAlignment(.trailing)
+                            .frame(maxWidth: 100)
+                            .textFieldStyle(.plain)
+                            .onAppear { currencyInput = transactionVM.settings.currencySymbol }
+                            .onSubmit { saveSettings() }
+                    }
+                } header: {
+                    Text("Currency")
                 }
 
                 // Appearance
-                Section("Appearance") {
-                    Picker("Theme", selection: Binding(
-                        get: { transactionVM.settings.themeMode },
-                        set: { newMode in
-                            Task {
-                                await transactionVM.updateSettings(
-                                    userId: authVM.currentUser?.uid ?? "",
-                                    updated: transactionVM.settings.copyWith(themeMode: newMode)
-                                )
+                Section {
+                    HStack {
+                        Label("Theme", systemImage: "paintbrush.fill")
+                            .foregroundColor(AppColors.primary)
+                        Spacer()
+                        Picker("", selection: Binding(
+                            get: { transactionVM.settings.themeMode },
+                            set: { newMode in
+                                Task {
+                                    await transactionVM.updateSettings(
+                                        userId: authVM.currentUser?.uid ?? "",
+                                        updated: transactionVM.settings.copyWith(themeMode: newMode)
+                                    )
+                                }
+                            }
+                        )) {
+                            ForEach(AppThemeMode.allCases, id: \.self) { mode in
+                                Text(mode.rawValue.capitalized).tag(mode)
                             }
                         }
-                    )) {
-                        ForEach(AppThemeMode.allCases, id: \.self) { mode in
-                            Text(mode.rawValue.capitalized).tag(mode)
-                        }
+                        .pickerStyle(.segmented)
+                        .frame(maxWidth: 200)
                     }
-                    .pickerStyle(.segmented)
+                } header: {
+                    Text("Appearance")
                 }
 
                 // Account
-                Section("Account") {
+                Section {
                     if let email = authVM.currentUser?.email {
-                        LabeledContent("Signed in as", value: email)
+                        LabeledContent {
+                            Text(email).foregroundColor(.secondary)
+                        } label: {
+                            Label("Signed in as", systemImage: "person.crop.circle.fill")
+                                .foregroundColor(AppColors.primary)
+                        }
                     }
                     Button(role: .destructive) { authVM.logout() } label: {
                         Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
                     }
+                } header: {
+                    Text("Account")
                 }
 
                 // Data
-                Section("Data") {
-                    NavigationLink("Manage Categories") {
+                Section {
+                    NavigationLink {
                         CategoryListView()
+                    } label: {
+                        Label("Manage Categories", systemImage: "square.grid.2x2.fill")
+                            .foregroundColor(AppColors.primary)
                     }
+                    
                     Button(role: .destructive) { showClearAlert = true } label: {
-                        Label("Clear All Data", systemImage: "trash")
+                        Label("Clear All Data", systemImage: "trash.fill")
                             .foregroundColor(.red)
                     }
+                } header: {
+                    Text("Data")
                 }
             }
+            .formStyle(.grouped)
             .navigationTitle("Settings")
             .alert("Clear All Data?", isPresented: $showClearAlert) {
                 Button("Clear", role: .destructive) {

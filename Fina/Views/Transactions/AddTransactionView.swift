@@ -22,35 +22,46 @@ struct AddTransactionView: View {
             // Header
             HStack {
                 Button("Cancel") { dismiss() }
+                    .buttonStyle(.plain)
+                    .foregroundColor(.secondary)
+                    .font(.system(.body, design: .rounded))
+                
                 Spacer()
+                
                 Text(editing == nil ? "Add Transaction" : "Edit Transaction")
-                    .font(.headline)
+                    .font(.system(.headline, design: .rounded))
+                    .fontWeight(.bold)
+                
                 Spacer()
-                Button {
+                
+                Button("Save") {
                     Task { await save(); dismiss() }
-                } label: {
-                    Image(systemName: "checkmark")
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(AppColors.primary)
+                .buttonStyle(.plain)
+                .font(.system(.body, design: .rounded).weight(.bold))
+                .foregroundColor((amountText.isEmpty || categoryId.isEmpty) ? .secondary : AppColors.primary)
                 .disabled(amountText.isEmpty || categoryId.isEmpty)
             }
             .padding()
+            .background(.regularMaterial)
 
             Divider()
 
             Form {
-                // Amount with currency prefix
-                Section("Amount") {
-                    HStack {
+                Section {
+                    HStack(alignment: .firstTextBaseline) {
                         Text(transactionVM.settings.currencySymbol)
+                            .font(.system(size: 24, weight: .semibold, design: .rounded))
                             .foregroundColor(.secondary)
+                        
                         TextField("0.00", text: $amountText)
+                            .font(.system(size: 40, weight: .bold, design: .rounded))
+                            .textFieldStyle(.plain)
                     }
+                    .padding(.vertical, 8)
                 }
-
-                // Income / Expense toggle
-                Section("Type") {
+                
+                Section {
                     Picker("Type", selection: $type) {
                         ForEach(TransactionType.allCases, id: \.self) { t in
                             Text(t.label).tag(t)
@@ -60,29 +71,23 @@ struct AddTransactionView: View {
                     .onChange(of: type) { categoryId = "" }
                 }
 
-                // Category dropdown — filtered by type
-                Section("Category") {
+                Section {
                     Picker("Category", selection: $categoryId) {
                         Text("Select…").tag("")
                         ForEach(filteredCategories) { cat in
-                            Label(cat.name, systemImage: cat.icon).tag(cat.id)
+                            Text(cat.name).tag(cat.id)
                         }
                     }
-                }
-
-                // Date picker
-                Section("Date") {
+                    
                     DatePicker("Date", selection: $date, displayedComponents: .date)
                         .datePickerStyle(.compact)
-                }
-
-                // Optional note
-                Section("Note (optional)") {
-                    TextField("Add a note…", text: $note)
+                    
+                    TextField("Add a note (optional)…", text: $note)
                 }
             }
+            .formStyle(.grouped)
         }
-        .frame(width: 400, height: 480)
+        .frame(width: 420, height: 500)
         .onAppear {
             if let tx = editing {
                 amountText = String(format: "%.2f", tx.amount)

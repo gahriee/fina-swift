@@ -5,12 +5,12 @@ struct AmountText: View {
     let amount:         Double
     let type:           TransactionType
     let currencySymbol: String
-    var font: Font = .body
+    var font: Font = .system(.body, design: .rounded)
 
     var body: some View {
         Text("\(type.sign)\(currencySymbol)\(String(format: "%.2f", amount))")
             .font(font)
-            .fontWeight(.semibold)
+            .fontWeight(.bold)
             .foregroundColor(type.color)
             .monospacedDigit()
     }

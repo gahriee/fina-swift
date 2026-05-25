@@ -7,35 +7,81 @@ struct BalanceCard: View {
     let currencySymbol: String
 
     var body: some View {
-        VStack(spacing: 12) {
-            Text("Total Balance")
-                .font(.subheadline)
-                .foregroundColor(.white.opacity(0.8))
-            Text("\(currencySymbol)\(String(format: "%.2f", balance))")
-                .font(.largeTitle).fontWeight(.bold).foregroundColor(.white)
-                .monospacedDigit()
-
-            HStack(spacing: 24) {
-                VStack(alignment: .leading) {
-                    Label("Income", systemImage: "arrow.down.circle.fill")
-                        .font(.caption).foregroundColor(.white.opacity(0.8))
-                    Text("\(currencySymbol)\(String(format: "%.2f", income))")
-                        .font(.subheadline).fontWeight(.semibold).foregroundColor(.white)
-                        .monospacedDigit()
+        VStack(spacing: 24) {
+            // Top Section: Total Balance
+            VStack(spacing: 8) {
+                Text("Total Balance")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.white.opacity(0.8))
+                
+                Text("\(currencySymbol)\(String(format: "%.2f", balance))")
+                    .font(.system(size: 36, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                    .monospacedDigit()
+            }
+            
+            Divider()
+                .background(Color.white.opacity(0.3))
+            
+            // Bottom Section: Income & Expense
+            HStack(spacing: 0) {
+                // Income
+                HStack(spacing: 12) {
+                    Circle()
+                        .fill(Color.white.opacity(0.2))
+                        .frame(width: 40, height: 40)
+                        .overlay(
+                            Image(systemName: "arrow.down")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundColor(.white)
+                        )
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Income")
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.8))
+                        Text("\(currencySymbol)\(String(format: "%.2f", income))")
+                            .font(.system(.subheadline, design: .rounded, weight: .semibold))
+                            .foregroundColor(.white)
+                            .monospacedDigit()
+                    }
                 }
-                Spacer()
-                VStack(alignment: .trailing) {
-                    Label("Expense", systemImage: "arrow.up.circle.fill")
-                        .font(.caption).foregroundColor(.white.opacity(0.8))
-                    Text("\(currencySymbol)\(String(format: "%.2f", expense))")
-                        .font(.subheadline).fontWeight(.semibold).foregroundColor(.white)
-                        .monospacedDigit()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                // Expense
+                HStack(spacing: 12) {
+                    Circle()
+                        .fill(Color.white.opacity(0.2))
+                        .frame(width: 40, height: 40)
+                        .overlay(
+                            Image(systemName: "arrow.up")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundColor(.white)
+                        )
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Expense")
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.8))
+                        Text("\(currencySymbol)\(String(format: "%.2f", expense))")
+                            .font(.system(.subheadline, design: .rounded, weight: .semibold))
+                            .foregroundColor(.white)
+                            .monospacedDigit()
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
-        .padding(20)
-        .frame(maxWidth: .infinity)
-        .background(AppColors.primary)
-        .cornerRadius(16)
+        .padding(24)
+        .background(
+            LinearGradient(
+                colors: [AppColors.primary, AppColors.primary.opacity(0.8)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        .shadow(color: AppColors.primary.opacity(0.3), radius: 15, x: 0, y: 10)
     }
 }

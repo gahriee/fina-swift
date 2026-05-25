@@ -6,21 +6,32 @@ struct TransactionRow: View {
     let currencySymbol: String
 
     var body: some View {
-        HStack(spacing: 12) {
-            CategoryIcon(icon: category?.icon ?? "questionmark")
-            VStack(alignment: .leading, spacing: 2) {
+        HStack(spacing: 16) {
+            CategoryIcon(icon: category?.icon ?? "questionmark.circle", size: 48)
+            
+            VStack(alignment: .leading, spacing: 4) {
                 Text(category?.name ?? "Unknown")
-                    .font(.subheadline).fontWeight(.medium)
+                    .font(.system(.headline, design: .rounded))
+                    .fontWeight(.semibold)
+                
                 if let note = transaction.note, !note.isEmpty {
-                    Text(note).font(.caption).foregroundColor(.secondary)
+                    Text(note)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
                 }
+                
                 Text(transaction.date, style: .date)
-                    .font(.caption2).foregroundColor(.secondary)
+                    .font(.caption)
+                    .foregroundColor(.secondary.opacity(0.8))
             }
+            
             Spacer()
+            
             AmountText(amount: transaction.amount, type: transaction.type,
-                       currencySymbol: currencySymbol)
+                       currencySymbol: currencySymbol, font: .system(.headline, design: .rounded))
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 8)
+        .contentShape(Rectangle())
     }
 }
