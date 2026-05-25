@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:fina-swift}",
+            "name": "Debug fina-swift",
+            "target": "fina-swift",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug fina-swift"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:fina-swift}",
+            "name": "Release fina-swift",
+            "target": "fina-swift",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release fina-swift"
+        }
+    ]
+}
