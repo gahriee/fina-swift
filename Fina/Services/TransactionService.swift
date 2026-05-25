@@ -15,11 +15,10 @@ final class TransactionService {
     ) -> ListenerRegistration {
         db.collection("transactions")
             .whereField("userId", isEqualTo: userId)
-            .order(by: "date", descending: true)
             .addSnapshotListener { snapshot, _ in
                 let items = snapshot?.documents.compactMap {
                     Transaction.fromDict($0.documentID, $0.data())
-                } ?? []
+                }.sorted(by: { $0.date > $1.date }) ?? []
                 onChange(items)
             }
     }
